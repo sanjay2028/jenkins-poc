@@ -36,7 +36,7 @@ pipeline {
             }
         }
 
-        stage("Deploy") {
+        stage("Deploy Code") {
             steps{
                 withCredentials([
                     sshUserPrivateKey(
