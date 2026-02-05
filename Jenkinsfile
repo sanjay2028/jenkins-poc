@@ -55,7 +55,6 @@ pipeline {
                             server.json > updated_server.json && \
                             mv updated_server.json server.json
 
-
                         jq . server.json
 
                         scp -i "$SSH_KEY" -o StrictHostKeyChecking=no \
