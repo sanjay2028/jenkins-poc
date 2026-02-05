@@ -48,9 +48,10 @@ pipeline {
                     )
                 ]){
                     sh """
-                       jq   --arg port "$APP_PORT" \
+                       jq --arg url "$APP_URL" \
+                            --arg port "$APP_PORT" \
                             --arg user "$APP_USER" \
-                            '.port = $port | .user = $user' \
+                            '.url = \$url | .port = \$port | .user = \$user' \
                             server.json > updated_server.json && \
                             mv updated_server.json server.json
 
