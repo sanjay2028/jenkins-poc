@@ -1,6 +1,5 @@
 pipeline {
     agent any
-
     environment {
         HOST = "98.81.239.161"
     }
@@ -28,7 +27,7 @@ pipeline {
                         env.APP_USER = "stage_user"
                     } 
                     else if (env.BRANCH_NAME == "main") {
-                        env.TARGET_DIR = "main"
+                        env.TARGET_DIR = "production"
                         env.APP_URL = "http://www.myagecy.com"
                         env.APP_PORT = 8080
                         env.APP_USER = "master_user"
