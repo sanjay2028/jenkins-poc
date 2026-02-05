@@ -1,5 +1,5 @@
 {
-    "host": "http:development.myagency.com",
+    "url": "http:development.myagency.com",
     "port": "3000",
     "user": "developer@developmetn.myagency.com"
 }

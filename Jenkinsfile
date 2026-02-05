@@ -17,21 +17,23 @@ pipeline {
                     if (env.BRANCH_NAME == "development") {
                         env.TARGET_DIR = "development"
                         env.APP_URL = "http://development.myagecy.com"
-                        env.APP_PORT = 3000
+                        env.APP_PORT = "3000"
                         env.APP_USER = "development_user"
                     } 
                     else if (env.BRANCH_NAME == "stage") {
                         env.TARGET_DIR = "stage"
                         env.APP_URL = "http://stage.myagecy.com"
-                        env.APP_PORT = 4000
+                        env.APP_PORT = "4000"
                         env.APP_USER = "stage_user"
                     } 
                     else if (env.BRANCH_NAME == "main") {
                         env.TARGET_DIR = "production"
                         env.APP_URL = "http://www.myagecy.com"
-                        env.APP_PORT = 8080
+                        env.APP_PORT = "8080"
                         env.APP_USER = "master_user"
-                    }
+                    } else {
+                        error "Unsupported branch: ${env.BRANCH_NAME}"
+                    }                    
                 }
             }
         }
@@ -46,18 +48,6 @@ pipeline {
                     )
                 ]){
                     sh """
-                        // jq --arg url "$APP_URL" \
-                        //     --argjson port "$APP_PORT" \
-                        //     --arg user "$APP_USER" \
-                        //     '.url = $url | .port = $port | .user = $user' \
-                        //     server.json > updated_server.json && \
-                        //     mv updated_server.json server.json
-                        echo $APP_URL
-                        echo $APP_PORT
-                        echo $APP_USER
-
-                        jq . server.json
-
                         scp -i "$SSH_KEY" -o StrictHostKeyChecking=no \
                         "$WORKSPACE/server.json" \
                         "$SSH_USER@$HOST:/home/$SSH_USER/$TARGET_DIR"
