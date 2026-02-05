@@ -1,10 +1,50 @@
 pipeline {
     agent any
 
+    environment {
+        HOST = "98.81.239.161"
+    }
+
     stages {
         stage('Build') {
             steps {
                 echo "Building branch: ${env.BRANCH_NAME}"
+            }
+        }
+
+         stage("Set Target") {
+            steps {
+                script {
+                    if (env.BRANCH_NAME == "development") {
+                        env.TARGET_DIR = "development"
+                    } 
+                    else if (env.BRANCH_NAME == "stage") {
+                        env.TARGET_DIR = "stage"
+                    } 
+                    else if (env.BRANCH_NAME == "main") {
+                        env.TARGET_DIR = "main"
+                    }
+                }
+            }
+        }
+
+        stage("Deploy") {
+            steps{
+                withCredentials([
+                    sshUserPrivateKey(
+                        credentialsId: "ec2-ssh-key",
+                        usernameVariable: "SSH_USER",
+                        keyFileVariable: "SSH_KEY"
+                    )
+                ]){
+                    sh """
+                        scp -i "$SSH_KEY" -o StrictHostKeyChecking=no \
+                        "$WORKSPACE/server.json" \
+                        "$SSH_USER@$HOST:/home/$SSH_USER/$TARGET_DIR"
+                        echo "File copied successfully with updated code"
+                    """
+                }
+
             }
         }
     }
