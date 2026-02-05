@@ -42,10 +42,10 @@ pipeline {
                     )
                 ]){
                     sh """
-                        scp -i "${SSH_KEY}" -o StrictHostKeyChecking=no \
-                        "${WORKSPACE}/server.json" \
-                        "${SSH_USER}@${HOST}:/home/${SSH_USER}/${TARGET_DIR}"
-                        echo "File copied successfully!"
+                        scp -i "$SSH_KEY" -o StrictHostKeyChecking=no \
+                        "$WORKSPACE/server.json" \
+                        "$SSH_USER@$HOST:/home/$SSH_USER/$TARGET_DIR"
+                        echo "File copied successfully with updated code"
                     """
                 }
 
