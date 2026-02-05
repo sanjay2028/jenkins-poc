@@ -2,6 +2,7 @@ pipeline {
     agent any
     environment {
         HOST = "98.81.239.161"
+        TARGET_DIR = "development"
     }
 
     stages{
@@ -20,9 +21,34 @@ pipeline {
         stage("BUILD"){
             steps{
                 sh """
-                    jq . server.json
-
+                    jq --version
+                    
+                    pwd
+                    
+                    ls -la
+                
+                    jq . "${WORKSPACE}/server.json"
                 """
+            }
+        }
+
+        stage("DEPLOY"){
+            steps{
+                withCredentials([
+                    sshUserPrivateKey(
+                        credentialsId: "ec2-ssh-key",
+                        usernameVariable: "SSH_USER",
+                        keyFileVariable: "SSH_KEY"
+                    )
+                ]){
+                    sh """
+                        scp -i "${SSH_KEY}" -o StrictHostKeyChecking=no \
+                        "${WORKSPACE}/server.json" \
+                        "${SSH_USER}@${HOST}:/home/${SSH_USER}/${TARGET_DIR}"
+                        echo "File copied successfully!"
+                    """
+                }
+
             }
         }
     }
