@@ -36,7 +36,7 @@ pipeline {
             }
         }
 
-        stage("Deploy Code") {
+        stage("Deploy") {
             steps{
                 withCredentials([
                     sshUserPrivateKey(
@@ -52,6 +52,8 @@ pipeline {
                             '.url = $url | .port = $port | .user = $user' \
                             server.json > updated_server.json && \
                             mv updated_server.json server.json
+
+                        jq . server.json
 
                         scp -i "$SSH_KEY" -o StrictHostKeyChecking=no \
                         "$WORKSPACE/server.json" \
