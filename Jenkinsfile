@@ -48,6 +48,8 @@ pipeline {
                     )
                 ]){
                     sh """
+                        jq . server.json
+
                         scp -i "$SSH_KEY" -o StrictHostKeyChecking=no \
                         "$WORKSPACE/server.json" \
                         "$SSH_USER@$HOST:/home/$SSH_USER/$TARGET_DIR"
