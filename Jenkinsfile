@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-        HOST = "98.81.239.161"
+        HOST = "13.218.38.62"
     }
 
     stages {
