@@ -1,5 +1,6 @@
 {
     "url": "http:development.myagency.com",
     "port": "3000",
-    "user": "developer@developmetn.myagency.com"
+    "user": "developer@developmetn.myagency.com",
+    "roles": "administrator"
 }
