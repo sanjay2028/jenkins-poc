@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: ccpro-dev
+  name: nginx-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: ccpro-web
+  template:
+    metadata:
+      labels:
+        app: ccpro-web
+    spec:
+      containers:
+      - name: ccpro-nginx
+        imagePullPolicy: IfNotPresent
+        image: nginx:1.25
+        ports:
+        - name: http
+          containerPort: 80
+        - name: https
+          containerPort: 443
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+  paused: false

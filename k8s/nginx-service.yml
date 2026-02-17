@@ -1,0 +1,14 @@
+apiVersion: apps/v1
+kind: Service
+metadata:
+  namespace: ccpro-dev
+  name: nginx-service
+spec:
+  selector:   
+    app: ccpro-web
+  ports:
+  - port: 80
+    targetPort: http
+  - port: 443
+    targetPort: https
+  type: ClusterIP
